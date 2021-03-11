@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ribeye+Marrow&display=swap');
+
+:root {
+  --primary-color: #7A3054;
+  --primary-accent: #F6E4ED;
+  --secondary-color: #3BD3BA;
+  --secondary-accent: #50778B;
+}
+* {
+  box-sizing: border-box; 
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin: 0;
+  font-size: calc(0.5rem + 0.6vw);
+  line-height: calc(1rem + 0.5vw);
+  font-family: 'Raleway', sans-serif;
+}
+header {
+  font-size: calc(0.6rem + 0.8vw);
+  font-family: 'Ribeye Marrow', cursive;
+  text-align: center;
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  height: 20vh;
+}
+main {
+  display: flex;
+  flex: 1;
+  background: var(--primary-color);
+}
+footer {
+  text-align: center;
+  font-size: calc(0.6rem + 0.5vw);
+  height: 10vh;
+  color: var(--primary-accent);
+}
+footer a{
+  text-decoration: none;
+  color: var(--primary-accent);
+}
+header, footer {
+  background: var(--primary-color);
+}
+header, footer, main {
+  padding: 1em;
+}

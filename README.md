@@ -10,7 +10,7 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 
 ### **Side notes**
 * Used **HTML5 semantic elements** for better structure and readability
-
+* Applied **CSS color palette** by `:root` selector
 
 ### **Tools:**
 * Visual Studio Code
