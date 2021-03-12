@@ -30,13 +30,21 @@ header {
 main {
   display: flex;
   flex: 1;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background: var(--primary-color);
 }
+main > .commentary {
+  flex: 0 0 5vh;
+}
+main > .game-container {
+  flex: 1;
+}
 .game-container {
   display: grid;
-  grid-template-columns: repeat(3, minmax(200px, 1fr));
-  grid-template-rows: repeat(3, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, minmax(10vw, 1fr));
+  grid-template-rows: repeat(3, minmax(10vh, 1fr));
   grid-gap: 1px;
   border: 3px solid var(--secondary-accent);
   background: var(--primary-accent);
@@ -61,5 +69,14 @@ header, footer {
   background: var(--primary-color);
 }
 header, footer, main {
-  padding: 1em;
+  padding: 1rem;
+}
+@media all and (max-width: 575px) {
+ header, footer {
+   padding: 1rem;
+ }
+ main {
+  align-items: stretch;
+  padding: 0rem;
+ }
 }
