@@ -9,6 +9,10 @@ const gameBoard = (() => {
     [],[],[]
   ];
   const clear = () => board.forEach(square => square.textContent = "");
+  
+  const clearButton = document.querySelector(".commentary > button");
+  clearButton.addEventListener("click", clear);
+  
   const render = () => {
     board.forEach((node) =>
       node.addEventListener("click", (event) => {

@@ -8,16 +8,16 @@
   --secondary-black: #50778B;
  --additional-color: #472949;
 }
-*,::before, ::after {
+* {
   padding: 0;
   margin: 0;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  user-select: none;
 }
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  
   font-size: calc(0.5rem + 0.6vw);
   line-height: calc(1rem + 0.5vw);
   font-family: 'Raleway', sans-serif;
