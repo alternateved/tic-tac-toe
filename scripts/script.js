@@ -1,32 +1,40 @@
 const playerFactory = (name, marker) => {
   return {name, marker};
 };
+
 const gameBoard = (() => {
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = [
-    [],[],[],
-    [],[],[],
-    [],[],[]
+    ["X"],[],[],
+    [],["O"],[],
+    ["O"],[],["X"]
   ];
-  const clear = () => board.forEach(square => square.textContent = "");
+  const clear = () => board.forEach(square => {
+    square.className = "";
+    square.textContent = "";
+  });
   
   const clearButton = document.querySelector(".commentary > button");
   clearButton.addEventListener("click", clear);
   
-  const render = () => {
-    board.forEach((node) =>
-      node.addEventListener("click", (event) => {
-        if (event.target.textContent) {
-        } else {
-          event.target.classList.add("x");
-          event.target.textContent = "X";
-        }
-      })
-    );
-  };
-  return { clear, render };
+  return { board, array, clear };
 })();
 
-const displayController = (() => {})();
+const displayController = (() => {
+  const render = (array, board) => {
+    for(let i = 0; i < array.length; i++) {
+      if(array[i] == "X") {
+        board[i].classList.add("x");
+      } else {
+        board[i].classList.add("o");
+      }
+      board[i].textContent = array[i];
+    }
+  };
+  return {
+    render
+  };
+})();
 
-gameBoard.render();
+
+displayController.render(gameBoard.array, gameBoard.board);
