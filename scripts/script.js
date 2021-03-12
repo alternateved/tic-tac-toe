@@ -1,23 +1,30 @@
-const playerFactory = (name, marker) => {
-  return {name, marker};
+const playerFactory = (name, mark) => {
+  return {name, mark};
 };
 
 const gameBoard = (() => {
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = [
-    ["X"],[],[],
-    [],["O"],[],
-    ["O"],[],["X"]
+    [],[],[],
+    [],[],[],
+    [],[],[]
   ];
-  const clear = () => board.forEach(square => {
-    square.className = "";
-    square.textContent = "";
-  });
+  const clear = () => {
+    for(let i = 0; i < board.length; i++) {
+      board[i].className = "";
+      board[i].textContent = "";
+      array[i] = "";
+    }
+  };
   
   const clearButton = document.querySelector(".commentary > button");
   clearButton.addEventListener("click", clear);
   
-  return { board, array, clear };
+  return {
+    board, 
+    array, 
+    clear 
+  };
 })();
 
 const displayController = (() => {
@@ -25,16 +32,48 @@ const displayController = (() => {
     for(let i = 0; i < array.length; i++) {
       if(array[i] == "X") {
         board[i].classList.add("x");
-      } else {
+      } else if (array[i] == "O") {
         board[i].classList.add("o");
       }
       board[i].textContent = array[i];
     }
   };
+  
+  const playWithHuman= (array, board) => {
+    const playerOne = playerFactory("Person One", "X");
+    const playerTwo = playerFactory("Person Two", "O");
+    let turn = 0;
+
+    board.forEach(spot => spot.addEventListener("click", () => {
+      
+      if (spot.textContent) { // check if spot is already taken
+        return;
+      } else { // if not then take it!
+        if (turn % 2 == 0) {
+          array[board.indexOf(spot)] = "X";
+         console.log(turn);
+        } else {
+          array[board.indexOf(spot)] = "O";
+          
+
+         console.log(turn);
+        }
+        render(array, board);
+
+        if (turn == 8) { // check if tie
+          
+          turn = 0;
+          console.log("It's a tie!");
+        }
+        turn++;
+      }
+    }));
+  }
+
   return {
-    render
+    render,
+    playWithHuman
   };
 })();
 
-
-displayController.render(gameBoard.array, gameBoard.board);
+displayController.playWithHuman(gameBoard.array, gameBoard.board);
