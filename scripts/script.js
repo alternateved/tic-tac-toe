@@ -1,3 +1,5 @@
+"use strict";
+
 const playerFactory = (name, mark) => {
   return { name, mark };
 };
@@ -6,6 +8,7 @@ const gameBoard = (() => {
   const container = document.querySelector(".game-container");
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = ["", "", "", "", "", "", "", "", ""];
+  let moves = 0; // number of moves taken on the gameboard
   const clear = () => {
     if (container.classList.contains("hidden")) {
       container.classList.remove("hidden");
@@ -15,6 +18,7 @@ const gameBoard = (() => {
       board[i].textContent = "";
       array[i] = "";
     }
+    moves = 0;
     displayController.commentary.textContent = ``;
   };
 
@@ -22,7 +26,8 @@ const gameBoard = (() => {
     container,
     board,
     array,
-    clear,
+    moves,
+    clear
   };
 })();
 
@@ -50,45 +55,45 @@ const displayController = (() => {
 })();
 
 const gameController = (() => {
-  const playWithHuman = (array, board) => {
+  const playWithHuman = (array, board, moves) => {
     const playerOne = playerFactory("Person One", "X");
     const playerTwo = playerFactory("Person Two", "O");
-    let turn = 0;
     let result = 0; 
 
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
+
         // check if spot is already taken
         if (spot.textContent) {
           return;
         // if not taken then take it!
         } else {
           // playerOne's turn
-          if (turn % 2 == 0) {
+          if (moves % 2 == 0) {
             displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             array[board.indexOf(spot)] = playerOne.mark;
             result = checkForWinner(array, playerOne.mark);
-            console.log(turn);  
+            console.log(moves);  
             // playerTwo's turn
           } else {
             displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
             result = checkForWinner(array, playerTwo.mark);
-            console.log(turn); 
+            console.log(moves); 
           }
           displayController.render(array, board);
 
           if (result) {
             console.log(`Winner is ${result}`);
-            turn = 0;
+            moves = 0;
             // gameBoard.container.classList.add("hidden");
             // gameBoard.container.parentNode.textContent = "trolololo";
           } else if (!array.some(spot => spot === "")) {
             console.log("It's a tie!");
-            turn = 0;
+            moves = 0;
             // gameBoard.container.classList.add("hidden");
           }
-          turn++;
+          moves++;
         }
       })
     );
@@ -129,4 +134,12 @@ const gameController = (() => {
   };
 })();
 
-gameController.playWithHuman(gameBoard.array, gameBoard.board);
+gameController.playWithHuman(gameBoard.array, gameBoard.board, gameBoard.moves);
+
+
+/* TO-DO-LIST
+  - Create a modal popup announcing the winner of the game
+  - Hide gameboard and ask players for their names, then start the gam
+  - Create and option in the beginning to choose opponent (human or AI)
+  - Create an AI
+*/
