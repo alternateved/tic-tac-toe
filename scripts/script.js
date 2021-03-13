@@ -5,9 +5,9 @@ const playerFactory = (name, mark) => {
 const gameBoard = (() => {
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = [
-    [],[],[],
-    [],[],[],
-    [],[],[]
+    "","","",
+    "","","",
+    "","",""
   ];
   const clear = () => {
     for(let i = 0; i < board.length; i++) {
@@ -39,6 +39,12 @@ const displayController = (() => {
     }
   };
   
+  return {
+    render
+  };
+})();
+
+const gameController = (() => {
   const playWithHuman= (array, board) => {
     const playerOne = playerFactory("Person One", "X");
     const playerTwo = playerFactory("Person Two", "O");
@@ -49,16 +55,16 @@ const displayController = (() => {
       if (spot.textContent) { // check if spot is already taken
         return;
       } else { // if not then take it!
-        if (turn % 2 == 0) {
+        if (turn % 2 == 0) { // playerOne's turn
           array[board.indexOf(spot)] = "X";
          console.log(turn);
-        } else {
+        } else { // playerTwo's turn
           array[board.indexOf(spot)] = "O";
           
 
          console.log(turn);
         }
-        render(array, board);
+        displayController.render(array, board);
 
         if (turn == 8) { // check if tie
           
@@ -67,13 +73,12 @@ const displayController = (() => {
         }
         turn++;
       }
-    }));
+    }));  
   }
 
   return {
-    render,
     playWithHuman
-  };
+  }
 })();
 
-displayController.playWithHuman(gameBoard.array, gameBoard.board);
+gameController.playWithHuman(gameBoard.array, gameBoard.board);
