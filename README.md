@@ -10,6 +10,8 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 
 ### **Side notes**
 * Used **HTML5 semantic elements** for better structure and readability
+* Learned how to use **factory functions** and **modules**
+* Learned about other possible JavaScript **design patterns**
 * Applied **CSS color palette** by `:root` selector
 
 ### **Tools:**

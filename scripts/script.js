@@ -3,20 +3,23 @@ const playerFactory = (name, mark) => {
 };
 
 const gameBoard = (() => {
+  const container = document.querySelector(".game-container");
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = ["", "", "", "", "", "", "", "", ""];
   const clear = () => {
+    if (container.classList.contains("hidden")) {
+      container.classList.remove("hidden");
+    }
     for (let i = 0; i < board.length; i++) {
       board[i].className = "";
       board[i].textContent = "";
       array[i] = "";
     }
+    displayController.commentary.textContent = ``;
   };
 
-  const clearButton = document.querySelector(".commentary > button");
-  clearButton.addEventListener("click", clear);
-
   return {
+    container,
     board,
     array,
     clear,
@@ -35,8 +38,14 @@ const displayController = (() => {
     }
   };
 
+  const clearButton = document.querySelector(".buttons > button");
+  clearButton.addEventListener("click", gameBoard.clear);
+  
+  const commentary = document.querySelector("#explainer");
+
   return {
     render,
+    commentary
   };
 })();
 
@@ -45,37 +54,39 @@ const gameController = (() => {
     const playerOne = playerFactory("Person One", "X");
     const playerTwo = playerFactory("Person Two", "O");
     let turn = 0;
+    let result = 0; 
 
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
+        // check if spot is already taken
         if (spot.textContent) {
-          // check if spot is already taken
           return;
+        // if not taken then take it!
         } else {
-          // if not then take it!
+          // playerOne's turn
           if (turn % 2 == 0) {
-            // playerOne's turn
+            displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             array[board.indexOf(spot)] = playerOne.mark;
-            if (checkForWinner(array, playerOne.mark)) {
-              console.log("Winner is X");
-            }
-            console.log(turn);
-          } else {
+            result = checkForWinner(array, playerOne.mark);
+            console.log(turn);  
             // playerTwo's turn
+          } else {
+            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
-            if (checkForWinner(array, playerTwo.mark)) {
-              console.log("Winner is O");
-            }
-
-            console.log(turn);
+            result = checkForWinner(array, playerTwo.mark);
+            console.log(turn); 
           }
           displayController.render(array, board);
 
-          if (turn == 8) {
-            // check if tie
-
+          if (result) {
+            console.log(`Winner is ${result}`);
             turn = 0;
+            // gameBoard.container.classList.add("hidden");
+            // gameBoard.container.parentNode.textContent = "trolololo";
+          } else if (!array.some(spot => spot === "")) {
             console.log("It's a tie!");
+            turn = 0;
+            // gameBoard.container.classList.add("hidden");
           }
           turn++;
         }
