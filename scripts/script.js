@@ -40,14 +40,23 @@ const displayController = (() => {
       board[i].textContent = array[i];
     }
   };
+  const modal = document.querySelector(".modal");
+  const showModal = () => {
+    modal.classList.toggle("hidden");
+  }
+  const writeToModal = (string) => {
+    modal.querySelector("span").textContent = string;
+  }
 
-  const clearButton = document.querySelector(".buttons > button");
-  clearButton.addEventListener("click", gameBoard.clear);
+  const restartButton = document.querySelector(".buttons > button");
+  restartButton.addEventListener("click", gameBoard.clear);
   
   const commentary = document.querySelector("#explainer");
 
   return {
     render,
+    showModal,
+    writeToModal,
     commentary
   };
 })();
@@ -72,13 +81,13 @@ const gameController = (() => {
           if (turn % 2 == 0) {
             displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             array[board.indexOf(spot)] = playerOne.mark;
-            result = checkForWinner(array, playerOne.mark);
+            result = checkForWinner(array, playerOne);
             console.log(turn);  
             // playerTwo's turn
           } else {
             displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
-            result = checkForWinner(array, playerTwo.mark);
+            result = checkForWinner(array, playerTwo);
             console.log(turn); 
           }
           displayController.render(array, board);
@@ -86,45 +95,46 @@ const gameController = (() => {
           if (result) {
             console.log(`Winner is ${result}`);
             resetTurn();
-            // gameBoard.container.classList.add("hidden");
-            // gameBoard.container.parentNode.textContent = "trolololo";
+            displayController.writeToModal(`Winner is ${result}`);
+            displayController.showModal();
           } else if (!array.some(spot => spot === "")) {
             console.log("It's a tie!");
             resetTurn();
-            // gameBoard.container.classList.add("hidden");
+            displayController.writeToModal(`Winner is ${result}`)
+            displayController.showModal();
           }
           turn++;
         }
       })
     );
   };
-  const checkForWinner = (array, mark) => {
+  const checkForWinner = (array, player) => {
     //check rows
     for (let i = 0; i < 9; i = i + 3) {
-      if (array[i] === mark) {
+      if (array[i] === player.mark) {
         if (array[i] === array[i + 1] && array[i + 1] === array[i + 2]) {
-          return mark;
+          return player.name;
         }
       }
     }
     // check columns
     for (let i = 0; i < 3; i++) {
-      if (array[i] === mark) {
+      if (array[i] === player.mark) {
         if (array[i] === array[i + 3] && array[i + 3] === array[i + 6]) {
-          return mark;
+          return player.name;
         }
       }
     }
     // check diagonal
-    if (array[0] === mark) {
+    if (array[0] === player.mark) {
       if (array[0] === array[4] && array[4] === array[8]) {
-        return mark;
+        return player.name;
       }
     }
     // check anti-diagonal
-    if (array[2] === mark) {
+    if (array[2] === player.mark) {
       if (array[2] === array[4] && array[4] === array[6]) {
-        return mark;
+        return player.name;
       }
     }
   };
@@ -139,7 +149,6 @@ const gameController = (() => {
 })();
 
 gameController.playWithHuman(gameBoard.array, gameBoard.board);
-
 
 /* TO-DO-LIST
   X Move turn variable to gameController logic
