@@ -5,7 +5,7 @@
   --primary-color: #7A3054;
   --primary-white: #F6E4ED;
   --secondary-color: #3BD3BA;
-  --secondary-black: #50778B;
+  --secondary-black: #8e9aa0;
   --additional-color: #472949;
 }
 * {
@@ -24,23 +24,24 @@ body {
   background: var(--primary-color);
 }
 header {
+  transition: all 0.5s ease;
   font-size: calc(0.6rem + 0.8vw);
   font-family: 'Ribeye Marrow', cursive;
   text-align: center;
   color: var(--secondary-color);
-  height: 10vh;
+  min-height: 12vh;
 }
 header > * {
   margin: 1rem;
 }
 .beginning {
-  transition: all 1s ease-in-out;
+  transform: translateY(25vh);
+  transition: all 1s ease;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
   font-size: calc(1.5rem + 0.8vw);
-  height: 35vh;
 }
 .commentary{
   min-height: 8vh;
@@ -54,6 +55,7 @@ header > * {
   margin: 1rem;
 }
 .commentary > button {
+  transform: translateY(25vh);
   width: 20vh;
   height: 5vh;
   font-size: calc(1rem + 0.3vw);
@@ -81,17 +83,18 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
 }
 main > .game-container {
-  flex: 1;
+  flex: 1 0 0;
 }
 .game-container {
   max-width: 600px;
   max-height: 600px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(10vw, 1fr));
-  grid-template-rows: repeat(3, minmax(10vh, 1fr));
+  grid-template-columns: repeat(3, minmax(20vmin, 1fr));
+  grid-template-rows: repeat(3, minmax(20vmin, 1fr));
   border: 5px solid var(--additional-color);
   border-radius: 10px;
   background: var(--primary-white);
@@ -197,6 +200,71 @@ header, footer, main {
   color: var(--primary-white);
 }
 .modal-container button:active {
+  background-color: var(--primary-color);
+  color: var(--primary-white);
+}
+.beginning-modal {
+  background-color: rgba(0,0,0,0.3);
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s ease;
+}
+.beginning-modal-container {
+  background-color: var(--primary-white);
+  border: 3px solid var(--primary-color);
+  border-radius: 5px;
+  padding: 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.beginning-modal-container > * {
+  text-align: center;
+  font-size: calc(0.8rem + 0.5vw);
+  color: var(--primary-color);
+  margin: 1rem;
+}
+.beginning-modal-container > span {
+  text-align: center;
+  font-size: calc(0.8rem + 0.5vw);
+  color: var(--primary-color);
+}
+.beginning-modal-container > form {
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.beginning-modal-container > form > * {
+  margin: 0.5rem;
+}
+.beginning-modal-container > form > input[type="text"] {
+  outline: 0;
+  padding: .5rem 1rem;
+  color: var(--secondary-black);
+  text-align: center;
+}
+.beginning-modal-container > form > button {
+  margin: 1rem;
+  padding: 10px 20px;
+  font-size: calc(0.8rem + 0.5vw);
+  background-color: var(--primary-white);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+.beginning-modal-container button:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-white);
+}
+.beginning-modal-container button:active {
   background-color: var(--primary-color);
   color: var(--primary-white);
 }
