@@ -5,13 +5,9 @@ const playerFactory = (name, mark) => {
 };
 
 const gameBoard = (() => {
-  const container = document.querySelector(".game-container");
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = ["", "", "", "", "", "", "", "", ""];
   const clear = () => {
-    if (container.classList.contains("hidden")) {
-      container.classList.remove("hidden");
-    }
     for (let i = 0; i < board.length; i++) {
       board[i].className = "";
       board[i].textContent = "";
@@ -22,10 +18,9 @@ const gameBoard = (() => {
   };
 
   return {
-    container,
     board,
     array,
-    clear,
+    clear
   };
 })();
 
@@ -40,27 +35,56 @@ const displayController = (() => {
       board[i].textContent = array[i];
     }
   };
+
+  const header = document.querySelector("header");
+  const commentary = document.querySelector("#explainer");
+  const container = document.querySelector(".game-container");
+  const playHumanButton = document.querySelector("#human");  
+  const playAIButton = document.querySelector("#AI");
+  const modalNewRoundButton = document.querySelector("#new-round");
+  const modalNewGameButton = document.querySelector("#new-game");
+  const changeOpponentButton = document.querySelector("#change-opponent");
+  const restartButton = document.querySelector("#restart");
   const modal = document.querySelector(".modal");
+
+  const toggleBeginning = () => {
+    playHumanButton.classList.toggle("hidden");
+    playAIButton.classList.toggle("hidden");
+
+    header.classList.toggle("beginning");
+    container.classList.toggle("hidden");
+    restartButton.classList.toggle("hidden");
+    changeOpponentButton.classList.toggle("hidden");
+  };
+
   const toggleModal = () => {
     modal.classList.toggle("hidden");
   };
   const writeToModal = (string) => {
     modal.querySelector("span").textContent = string;
   };
-  const modalNewRoundButton = document.querySelector("#new-round");
+  
+
+
+  restartButton.addEventListener("click", gameBoard.clear);
+  playHumanButton.addEventListener("click", toggleBeginning);
+  changeOpponentButton.addEventListener("click", () => {
+    gameBoard.clear();
+    toggleBeginning();
+  });
+  modalNewGameButton.addEventListener("click", () => {
+    gameBoard.clear();
+    toggleModal();
+    toggleBeginning();
+  });
   modalNewRoundButton.addEventListener("click", () => {
     gameBoard.clear();
     toggleModal();
   });
-  const modalNewGameButton = document.querySelector("#new-game");
-  const changeOpponentButton = document.querySelector("#change-opponent");
-  const restartButton = document.querySelector("#restart");
-  restartButton.addEventListener("click", gameBoard.clear);
-
-  const commentary = document.querySelector("#explainer");
 
   return {
     render,
+    toggleBeginning,
     toggleModal,
     writeToModal,
     commentary,
@@ -70,7 +94,7 @@ const displayController = (() => {
 const gameController = (() => {
   let turn = 0;
 
-  const playWithHuman = (array, board, moves) => {
+  const playWithHuman = (array, board) => {
     const playerOne = playerFactory("Person One", "X");
     const playerTwo = playerFactory("Person Two", "O");
     let result = "";
@@ -148,7 +172,7 @@ const gameController = (() => {
 
   return {
     playWithHuman,
-    resetTurn,
+    resetTurn
   };
 })();
 
@@ -156,8 +180,8 @@ gameController.playWithHuman(gameBoard.array, gameBoard.board);
 
 /* TO-DO-LIST
   X Move turn variable to gameController logic
-  - Create a modal popup announcing the winner of the game
-  - Hide gameboard and ask players for their names, then start the gam
+  X Create a modal popup announcing the winner of the game
+  - Hide gameboard and ask players for their names, then start the game
   - Create and option in the beginning to choose opponent (human or AI)
   - Create an AI
 */
