@@ -46,6 +46,12 @@ const displayController = (() => {
   const changeOpponentButton = document.querySelector("#change-opponent");
   const restartButton = document.querySelector("#restart");
   const modal = document.querySelector(".modal");
+  const beginningModal = document.querySelector(".beginning-modal");
+  const form = document.querySelector("#player-names");
+
+  const toggleBeginningModal = () => {
+    beginningModal.classList.toggle("hidden");
+  };
 
   const toggleBeginning = () => {
     playHumanButton.classList.toggle("hidden");
@@ -64,10 +70,10 @@ const displayController = (() => {
     modal.querySelector("span").textContent = string;
   };
   
-
-
   restartButton.addEventListener("click", gameBoard.clear);
-  playHumanButton.addEventListener("click", toggleBeginning);
+  playHumanButton.addEventListener("click", toggleBeginningModal);
+  
+
   changeOpponentButton.addEventListener("click", () => {
     gameBoard.clear();
     toggleBeginning();
@@ -82,6 +88,14 @@ const displayController = (() => {
     toggleModal();
   });
 
+  form.addEventListener("submit", (event) => {
+    gameController.setPlayerNames(form);
+    toggleBeginningModal();
+    toggleBeginning();
+    form.reset();
+    event.preventDefault();
+  });
+
   return {
     render,
     toggleBeginning,
@@ -93,10 +107,15 @@ const displayController = (() => {
 
 const gameController = (() => {
   let turn = 0;
+  let playerOne = "";
+  let playerTwo = "";
+
+  const setPlayerNames = (form) => {
+    playerOne = playerFactory(form.elements["player-one"].value, "X");
+    playerTwo = playerFactory(form.elements["player-two"].value, "O");
+  }
 
   const playWithHuman = (array, board) => {
-    const playerOne = playerFactory("Person One", "X");
-    const playerTwo = playerFactory("Person Two", "O");
     let result = "";
 
     board.forEach((spot) =>
@@ -171,6 +190,7 @@ const gameController = (() => {
   };
 
   return {
+    setPlayerNames,
     playWithHuman,
     resetTurn
   };

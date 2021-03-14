@@ -246,7 +246,7 @@ header, footer, main {
 .beginning-modal-container > form > input[type="text"] {
   outline: 0;
   padding: .5rem 1rem;
-  color: var(--secondary-black);
+  color: var(--additional-color);
   text-align: center;
 }
 .beginning-modal-container > form > button {
