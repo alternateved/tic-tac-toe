@@ -8,7 +8,6 @@ const gameBoard = (() => {
   const container = document.querySelector(".game-container");
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = ["", "", "", "", "", "", "", "", ""];
-  let moves = 0; // number of moves taken on the gameboard
   const clear = () => {
     if (container.classList.contains("hidden")) {
       container.classList.remove("hidden");
@@ -18,7 +17,7 @@ const gameBoard = (() => {
       board[i].textContent = "";
       array[i] = "";
     }
-    moves = 0;
+    gameController.resetTurn();
     displayController.commentary.textContent = ``;
   };
 
@@ -26,7 +25,6 @@ const gameBoard = (() => {
     container,
     board,
     array,
-    moves,
     clear
   };
 })();
@@ -55,6 +53,8 @@ const displayController = (() => {
 })();
 
 const gameController = (() => {
+  let turn = 0;
+
   const playWithHuman = (array, board, moves) => {
     const playerOne = playerFactory("Person One", "X");
     const playerTwo = playerFactory("Person Two", "O");
@@ -69,31 +69,31 @@ const gameController = (() => {
         // if not taken then take it!
         } else {
           // playerOne's turn
-          if (moves % 2 == 0) {
+          if (turn % 2 == 0) {
             displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             array[board.indexOf(spot)] = playerOne.mark;
             result = checkForWinner(array, playerOne.mark);
-            console.log(moves);  
+            console.log(turn);  
             // playerTwo's turn
           } else {
             displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
             result = checkForWinner(array, playerTwo.mark);
-            console.log(moves); 
+            console.log(turn); 
           }
           displayController.render(array, board);
 
           if (result) {
             console.log(`Winner is ${result}`);
-            moves = 0;
+            resetTurn();
             // gameBoard.container.classList.add("hidden");
             // gameBoard.container.parentNode.textContent = "trolololo";
           } else if (!array.some(spot => spot === "")) {
             console.log("It's a tie!");
-            moves = 0;
+            resetTurn();
             // gameBoard.container.classList.add("hidden");
           }
-          moves++;
+          turn++;
         }
       })
     );
@@ -128,13 +128,17 @@ const gameController = (() => {
       }
     }
   };
+  const resetTurn = () => {
+    turn = 0;
+  }
 
   return {
     playWithHuman,
+    resetTurn
   };
 })();
 
-gameController.playWithHuman(gameBoard.array, gameBoard.board, gameBoard.moves);
+gameController.playWithHuman(gameBoard.array, gameBoard.board);
 
 
 /* TO-DO-LIST
