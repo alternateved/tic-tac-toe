@@ -113,12 +113,14 @@ const displayController = (() => {
       gameController.setPlayerName(form);
       toggleBeginningModal();
       toggleBeginning();
+      gameController.playWithHuman(gameBoard.array, gameBoard.board);
       form.reset();
       event.preventDefault();
     } else {
       gameController.setPlayerNames(form);
       toggleBeginningModal();
       toggleBeginning();
+      gameController.playWithHuman(gameBoard.array, gameBoard.board);
       form.reset();
       event.preventDefault();
     }
@@ -229,8 +231,6 @@ const gameController = (() => {
     resetTurn
   };
 })();
-
-gameController.playWithHuman(gameBoard.array, gameBoard.board);
 
 /* TO-DO-LIST
   X Move turn variable to gameController logic

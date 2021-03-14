@@ -275,8 +275,14 @@ header, footer, main {
  header, footer {
    padding: 1rem;
  }
+ header > * {
+  margin: 0rem;
+}
  main {
   align-items: stretch;
   padding: 0rem;
+ }
+ .beginning {
+  line-height: calc(3rem + 0.5vw);
  }
 }
