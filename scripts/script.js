@@ -142,6 +142,7 @@ gameController.playWithHuman(gameBoard.array, gameBoard.board);
 
 
 /* TO-DO-LIST
+  X Move turn variable to gameController logic
   - Create a modal popup announcing the winner of the game
   - Hide gameboard and ask players for their names, then start the gam
   - Create and option in the beginning to choose opponent (human or AI)
