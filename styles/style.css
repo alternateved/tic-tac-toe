@@ -129,7 +129,7 @@ header, footer, main {
   background-color: var(--primary-white);
   border: 3px solid var(--primary-color);
   border-radius: 5px;
-  padding: 3rem 3rem;
+  padding: 2rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -142,7 +142,12 @@ header, footer, main {
   font-size: calc(0.8rem + 0.5vw);
   color: var(--primary-color);
 }
-.modal-container > button {
+.modal-options {
+  display: flex;
+  align-items: center;
+}
+.modal-options > button {
+  margin: 0.5rem;
   padding: 10px 20px;
   font-size: calc(0.8rem + 0.5vw);
   background-color: var(--primary-white);

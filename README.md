@@ -13,6 +13,7 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 * Learned how to use **factory functions** and **modules**
 * Learned about other possible JavaScript **design patterns**
 * Learned how to prevent moving of page's elements with CSS
+* Learned how to create a **modal**
 * Applied **CSS color palette** by `:root` selector
 
 ### **Tools:**
