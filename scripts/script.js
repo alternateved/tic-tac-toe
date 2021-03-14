@@ -48,7 +48,9 @@ const displayController = (() => {
   const modal = document.querySelector(".modal");
   const beginningModal = document.querySelector(".beginning-modal");
   const form = document.querySelector("#player-names");
-
+  const playerTwoLabel = document.querySelector("#player-two-label");
+  const playerTwoInput = document.querySelector("#player-two-input");
+  
   const toggleBeginningModal = () => {
     beginningModal.classList.toggle("hidden");
   };
@@ -71,8 +73,25 @@ const displayController = (() => {
   };
   
   restartButton.addEventListener("click", gameBoard.clear);
-  playHumanButton.addEventListener("click", toggleBeginningModal);
+  playHumanButton.addEventListener("click", () => {
+    if (playerTwoLabel.classList.contains("hidden")) {
+      playerTwoLabel.classList.toggle("hidden");
+    }
+    if (playerTwoInput.classList.contains("hidden")) {
+      playerTwoInput.classList.toggle("hidden");
+    }
+    toggleBeginningModal();
+  });
   
+  playAIButton.addEventListener("click", () => {
+    if (!playerTwoLabel.classList.contains("hidden")) {
+      playerTwoLabel.classList.toggle("hidden");
+    }
+    if (!playerTwoInput.classList.contains("hidden")) {
+      playerTwoInput.classList.toggle("hidden");
+    }
+  toggleBeginningModal();
+  });
 
   changeOpponentButton.addEventListener("click", () => {
     gameBoard.clear();
@@ -89,11 +108,20 @@ const displayController = (() => {
   });
 
   form.addEventListener("submit", (event) => {
-    gameController.setPlayerNames(form);
-    toggleBeginningModal();
-    toggleBeginning();
-    form.reset();
-    event.preventDefault();
+    // check if user submitted from Human Play or AI Play
+    if (event.target[1].classList.contains("hidden")) {
+      gameController.setPlayerName(form);
+      toggleBeginningModal();
+      toggleBeginning();
+      form.reset();
+      event.preventDefault();
+    } else {
+      gameController.setPlayerNames(form);
+      toggleBeginningModal();
+      toggleBeginning();
+      form.reset();
+      event.preventDefault();
+    }
   });
 
   return {
@@ -113,6 +141,11 @@ const gameController = (() => {
   const setPlayerNames = (form) => {
     playerOne = playerFactory(form.elements["player-one"].value, "X");
     playerTwo = playerFactory(form.elements["player-two"].value, "O");
+  }
+
+  const setPlayerName = (form) => {
+    playerOne = playerFactory(form.elements["player-one"].value, "X");
+    playerTwo = playerFactory("AI", "O");
   }
 
   const playWithHuman = (array, board) => {
@@ -191,6 +224,7 @@ const gameController = (() => {
 
   return {
     setPlayerNames,
+    setPlayerName,
     playWithHuman,
     resetTurn
   };
