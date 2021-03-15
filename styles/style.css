@@ -56,7 +56,7 @@ header > * {
 }
 .commentary > button {
   transform: translateY(25vh);
-  width: 20vh;
+  width: 40vw;
   height: 5vh;
   font-size: calc(1rem + 0.3vw);
   background-color: var(--primary-color);
@@ -93,11 +93,12 @@ main > .game-container {
   max-height: 600px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(20vmin, 1fr));
-  grid-template-rows: repeat(3, minmax(20vmin, 1fr));
+  grid-template-columns: repeat(3, minmax(10vw, 1fr));
+  grid-template-rows: repeat(3, minmax(10vw, 1fr));
   border: 5px solid var(--additional-color);
   border-radius: 10px;
   background: var(--primary-white);
+  overflow: hidden;
 }
 .game-container > div {
   display: flex;

@@ -165,6 +165,7 @@ const displayController = (() => {
 
 const gameController = (() => {
   let turn = 0;
+  let result = "";
   let playerOne = "";
   let playerTwo = "";
 
@@ -180,25 +181,102 @@ const gameController = (() => {
     playerTwo = playerFactory("AI", "O");
   };
 
+  // helper function for random number generation in range 0 to 8
   const generateRandomNumber = () => {
     return Math.floor(Math.random() * 9);
   };
 
-  const generateMove = (array) => {
+  // generate random number and check if array is empty for that index
+  const generateRandomMove = (array) => {
     let choice = generateRandomNumber();
-
     while (array[choice] !== "") {
       choice = generateRandomNumber();
     }
-
     return choice;
+  };
+
+  const getCurrentArrayState = (array) => {
+    return array.map((element, index) => (element ? element : index));
+  };
+  // return filtered array with number of array's indexes that are not taken
+  const getEmptyArrayIndexes = (array) => {
+    return array.filter((element) => element !== "X" && element !== "O");
+  };
+
+  // return best move available with help of minimax algorithm
+  const minimax = (array, passedMark) => {
+    const humanMark = "X";
+    const aiMark = "O";
+    // store current array state with empty places switched to indexes of that places
+    const currentArrayState = getCurrentArrayState(array);
+    
+    // create an array of available moves
+    const availableMoves = getEmptyArrayIndexes(currentArrayState);
+    // keep log of each trial run
+    const trialRunLogs = [];
+
+    // console.log(availableMoves.length);
+
+    // check for terminal state - if any player won or if it is a tie
+    if (checkForWinningCombination(currentArrayState, humanMark)) {
+      return { score: -1 };
+    } else if (checkForWinningCombination(currentArrayState, aiMark)) {
+      return { score: 1 };
+    } else if (availableMoves.length === 0) {
+      return { score: 0 };
+    }
+
+    // loop through each available move and test outcome of that move
+    for (let i = 0; i < availableMoves.length; i++) {
+      // store log of this trial run
+      const trialRun = {};
+      // store current index
+      trialRun.index = currentArrayState[availableMoves[i]];
+      currentArrayState[availableMoves[i]] = passedMark;
+
+      // check what has changes since move was taken and run function recursively
+      if (passedMark === aiMark) {
+        const result = minimax(currentArrayState, humanMark);
+        trialRun.score = result.score;
+      } else {
+        const result = minimax(currentArrayState, aiMark);
+        trialRun.score = result.score;
+      }
+      // revert changes
+      currentArrayState[availableMoves[i]] = trialRun.index;
+      // append the result of the trial run to the trialRunLogs
+      trialRunLogs.push(trialRun);
+    }
+
+    // create a store most succesfull trial run reference
+    let bestTrialRun = null;
+
+    // get the reference to the best trial run
+    if (passedMark === aiMark) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < trialRunLogs.length; i++) {
+        if (trialRunLogs[i].score > bestScore) {
+          bestScore = trialRunLogs[i].score;
+          bestTrialRun = i;
+        }
+      }
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < trialRunLogs.length; i++) {
+        if (trialRunLogs[i].score < bestScore) {
+          bestScore = trialRunLogs[i].score;
+          bestTrialRun = i;
+        }
+      }
+    }
+
+    // return index of best trial run for the current player - maximize for AI, minimize for human
+    return trialRunLogs[bestTrialRun];
   };
 
   // main logic of game round with human
   const playWithHuman = (array, board) => {
-    let result = "";
-
-    console.log(generateMove(array));
+    displayController.commentary.textContent = `Choose wisely your move`;
 
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
@@ -209,22 +287,27 @@ const gameController = (() => {
         } else {
           // playerOne's turn
           if (turn % 2 == 0) {
-            displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
+      
             array[board.indexOf(spot)] = playerOne.mark;
-            result = checkForWinningCombination(array, playerOne);
+            if (checkForWinningCombination(array, playerOne.mark)) {
+              result = playerOne.name;
+            }
+            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             console.log(turn);
             // playerTwo's turn
           } else {
-            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
-            result = checkForWinningCombination(array, playerTwo);
+            if (checkForWinningCombination(array, playerTwo.mark)) {
+              result = playerTwo.name;
+            }
+            displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             console.log(turn);
           }
           displayController.render(array, board);
 
           // check if there is a winner of if it is a tie
-          evaluateResult();
-          
+          evaluateResult(result, array)
+
           turn++;
         }
       })
@@ -233,8 +316,6 @@ const gameController = (() => {
 
   // main logic of game round with AI
   const playWithAI = (array, board) => {
-    let result = "";
-
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
         // check if spot is already taken
@@ -245,7 +326,9 @@ const gameController = (() => {
           // playerOne's turn
           displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
           array[board.indexOf(spot)] = playerOne.mark;
-          result = checkForWinningCombination(array, playerOne);
+          if (checkForWinningCombination(array, playerOne.mark)) {
+            result = playerOne.name;
+          }
           turn++;
           displayController.render(array, board);
 
@@ -254,14 +337,17 @@ const gameController = (() => {
           } else {
             // AI's turn
             displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
-            setTimeout(function () {
-              array[generateMove(array)] = playerTwo.mark;
-              result = checkForWinningCombination(array, playerTwo);
+            setTimeout( () =>{
+              array[minimax(array, playerTwo.mark).index] = playerTwo.mark;
+              // array[generateRandomMove(array)] = playerTwo.mark;
+
+              if (checkForWinningCombination(array, playerTwo.mark)) {
+                result = playerTwo.name;
+              }
               displayController.render(array, board);
               turn++;
               evaluateResult(result, array);
-              console.log("I have waited so long!");
-            }, 400);
+            }, 500);
           }
         }
       })
@@ -276,7 +362,6 @@ const gameController = (() => {
       displayController.toggleModal();
       return true;
     } else if (!array.some((spot) => spot === "")) {
-      console.log("It's a tie!");
       resetTurn();
       displayController.writeToModal(`It's a tie!`);
       displayController.toggleModal();
@@ -284,39 +369,42 @@ const gameController = (() => {
     }
     return false;
   };
+
   // check all possibilities if last player's move was a winning one
-  const checkForWinningCombination = (array, player) => {
+  const checkForWinningCombination = (array, mark) => {
     //check rows
     for (let i = 0; i < 9; i = i + 3) {
-      if (array[i] === player.mark) {
+      if (array[i] === mark) {
         if (array[i] === array[i + 1] && array[i + 1] === array[i + 2]) {
-          return player.name;
+          return true;
         }
       }
     }
     // check columns
     for (let i = 0; i < 3; i++) {
-      if (array[i] === player.mark) {
+      if (array[i] === mark) {
         if (array[i] === array[i + 3] && array[i + 3] === array[i + 6]) {
-          return player.name;
+          return true;
         }
       }
     }
     // check diagonal
-    if (array[0] === player.mark) {
+    if (array[0] === mark) {
       if (array[0] === array[4] && array[4] === array[8]) {
-        return player.name;
+        return true;
       }
     }
     // check anti-diagonal
-    if (array[2] === player.mark) {
+    if (array[2] === mark) {
       if (array[2] === array[4] && array[4] === array[6]) {
-        return player.name;
+        return true;
       }
     }
+    return false;
   };
   const resetTurn = () => {
     turn = 0;
+    result = "";
   };
 
   return {
@@ -333,5 +421,5 @@ const gameController = (() => {
   X Create a modal popup announcing the winner of the game
   X Hide gameboard and ask players for their names, then start the game
   X Create and option in the beginning to choose opponent (human or AI)
-  - Create an AI
+  X Create an AI
 */
