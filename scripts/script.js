@@ -115,17 +115,14 @@ const displayController = (() => {
 
   // go back to main screen and start anew
   changeOpponentButton.addEventListener("click", () => {
-    gameBoard.clear();
-    toggleBeginning();
-    toggleInterface();
+    // temporary solution to go back to main menu since 
+    window.location.reload();
   });
 
   // go back to main screen and start anew from modal
   modalNewGameButton.addEventListener("click", () => {
-    gameBoard.clear();
-    toggleModal();
-    toggleBeginning();
-    toggleInterface();
+    // temporary solution to go back to main menu
+    window.location.reload();
   });
 
   // start anew from modal
@@ -316,6 +313,8 @@ const gameController = (() => {
 
   // main logic of game round with AI
   const playWithAI = (array, board) => {
+    displayController.commentary.textContent = `Choose wisely your move`;
+
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
         // check if spot is already taken
@@ -324,7 +323,7 @@ const gameController = (() => {
           // if not taken then take it!
         } else {
           // playerOne's turn
-          displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
+          displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
           array[board.indexOf(spot)] = playerOne.mark;
           if (checkForWinningCombination(array, playerOne.mark)) {
             result = playerOne.name;
@@ -336,7 +335,7 @@ const gameController = (() => {
             return;
           } else {
             // AI's turn
-            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
+            
             setTimeout( () =>{
               array[minimax(array, playerTwo.mark).index] = playerTwo.mark;
               // array[generateRandomMove(array)] = playerTwo.mark;
@@ -345,10 +344,12 @@ const gameController = (() => {
                 result = playerTwo.name;
               }
               displayController.render(array, board);
+              displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
               turn++;
               evaluateResult(result, array);
             }, 500);
           }
+          
         }
       })
     );

@@ -56,7 +56,7 @@ header > * {
 }
 .commentary > button {
   transform: translateY(25vh);
-  width: 40vw;
+  width: 18vw;
   height: 5vh;
   font-size: calc(1rem + 0.3vw);
   background-color: var(--primary-color);
@@ -219,7 +219,7 @@ header, footer, main {
   background-color: var(--primary-white);
   border: 3px solid var(--primary-color);
   border-radius: 5px;
-  padding: 2rem 2rem;
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -283,6 +283,10 @@ header, footer, main {
   align-items: stretch;
   padding: 0rem;
  }
+ .commentary > button {
+  width: 40vw;
+  height: 5vh;
+}
  .beginning {
   line-height: calc(3rem + 0.5vw);
  }
