@@ -6,7 +6,6 @@ const playerFactory = (name, mark) => {
 };
 
 const gameBoard = (() => {
-
   // create array from DOM nodelist and simple array for storing results
   const board = Array.from(document.querySelectorAll(".game-container > div"));
   const array = ["", "", "", "", "", "", "", "", ""];
@@ -30,7 +29,6 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-
   // render array to board
   const render = (array, board) => {
     for (let i = 0; i < array.length; i++) {
@@ -166,7 +164,6 @@ const displayController = (() => {
 })();
 
 const gameController = (() => {
-  
   let turn = 0;
   let playerOne = "";
   let playerTwo = "";
@@ -183,9 +180,25 @@ const gameController = (() => {
     playerTwo = playerFactory("AI", "O");
   };
 
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * 9);
+  };
+
+  const generateMove = (array) => {
+    let choice = generateRandomNumber();
+
+    while (array[choice] !== "") {
+      choice = generateRandomNumber();
+    }
+
+    return choice;
+  };
+
   // main logic of game round with human
   const playWithHuman = (array, board) => {
     let result = "";
+
+    console.log(generateMove(array));
 
     board.forEach((spot) =>
       spot.addEventListener("click", () => {
@@ -198,27 +211,20 @@ const gameController = (() => {
           if (turn % 2 == 0) {
             displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
             array[board.indexOf(spot)] = playerOne.mark;
-            result = checkForWinner(array, playerOne);
+            result = checkForWinningCombination(array, playerOne);
             console.log(turn);
             // playerTwo's turn
           } else {
             displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
             array[board.indexOf(spot)] = playerTwo.mark;
-            result = checkForWinner(array, playerTwo);
+            result = checkForWinningCombination(array, playerTwo);
             console.log(turn);
           }
           displayController.render(array, board);
 
-          if (result) {
-            resetTurn();
-            displayController.writeToModal(`${result} is the winner!`);
-            displayController.toggleModal();
-          } else if (!array.some((spot) => spot === "")) {
-            console.log("It's a tie!");
-            resetTurn();
-            displayController.writeToModal(`It's a tie!`);
-            displayController.toggleModal();
-          }
+          // check if there is a winner of if it is a tie
+          evaluateResult();
+          
           turn++;
         }
       })
@@ -237,38 +243,49 @@ const gameController = (() => {
           // if not taken then take it!
         } else {
           // playerOne's turn
-          if (turn % 2 == 0) {
-            displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
-            array[board.indexOf(spot)] = playerOne.mark;
-            result = checkForWinner(array, playerOne);
-            console.log(turn);
-            // playerTwo's turn
-          } else {
-            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
-            array[board.indexOf(spot)] = playerTwo.mark;
-            result = checkForWinner(array, playerTwo);
-            console.log(turn);
-          }
+          displayController.commentary.textContent = `Now, it is ${playerOne.name}'s turn`;
+          array[board.indexOf(spot)] = playerOne.mark;
+          result = checkForWinningCombination(array, playerOne);
+          turn++;
           displayController.render(array, board);
 
-          if (result) {
-            resetTurn();
-            displayController.writeToModal(`Winner is ${result}`);
-            displayController.toggleModal();
-          } else if (!array.some((spot) => spot === "")) {
-            console.log("It's a tie!");
-            resetTurn();
-            displayController.writeToModal(`It's a tie!`);
-            displayController.toggleModal();
+          if (evaluateResult(result, array)) {
+            return;
+          } else {
+            // AI's turn
+            displayController.commentary.textContent = `Now, it is ${playerTwo.name}'s turn`;
+            setTimeout(function () {
+              array[generateMove(array)] = playerTwo.mark;
+              result = checkForWinningCombination(array, playerTwo);
+              displayController.render(array, board);
+              turn++;
+              evaluateResult(result, array);
+              console.log("I have waited so long!");
+            }, 400);
           }
-          turn++;
         }
       })
     );
   };
 
+  // check if the game has been won or tied
+  const evaluateResult = (result, array) => {
+    if (result) {
+      resetTurn();
+      displayController.writeToModal(`Winner is ${result}`);
+      displayController.toggleModal();
+      return true;
+    } else if (!array.some((spot) => spot === "")) {
+      console.log("It's a tie!");
+      resetTurn();
+      displayController.writeToModal(`It's a tie!`);
+      displayController.toggleModal();
+      return true;
+    }
+    return false;
+  };
   // check all possibilities if last player's move was a winning one
-  const checkForWinner = (array, player) => {
+  const checkForWinningCombination = (array, player) => {
     //check rows
     for (let i = 0; i < 9; i = i + 3) {
       if (array[i] === player.mark) {
