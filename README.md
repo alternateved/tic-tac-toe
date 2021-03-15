@@ -4,9 +4,15 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 
 **Live preview** of the project is available [here](https://alternateved.github.io/tic-tac-toe/).
 
+![Demo](images/peek.gif)
 
 ## **Features**
-
+* You can play with another human on the same device
+* You can play with **unbeatable AI**
+* You can input **custom names** for players
+* Live commentary for every move
+* Game is **mobile responsive**
+* You can restart match or start new game altogether
 
 ### **Side notes**
 * Used **HTML5 semantic elements** for better structure and readability

@@ -283,6 +283,9 @@ header, footer, main {
   align-items: stretch;
   padding: 0rem;
  }
+ .game-container {
+  max-width: 100%;
+ }
  .commentary > button {
   width: 40vw;
   height: 5vh;

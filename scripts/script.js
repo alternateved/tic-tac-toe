@@ -93,6 +93,7 @@ const displayController = (() => {
     }
     if (playerTwoInput.classList.contains("hidden")) {
       playerTwoInput.classList.toggle("hidden");
+      playerTwoInput.required = true;
     }
     toggleBeginning();
     toggleBeginningModal();
@@ -105,6 +106,7 @@ const displayController = (() => {
     }
     if (!playerTwoInput.classList.contains("hidden")) {
       playerTwoInput.classList.toggle("hidden");
+      playerTwoInput.required = false;
     }
     toggleBeginning();
     toggleBeginningModal();
@@ -115,7 +117,7 @@ const displayController = (() => {
 
   // go back to main screen and start anew
   changeOpponentButton.addEventListener("click", () => {
-    // temporary solution to go back to main menu since 
+    // temporary solution to go back to main menu since
     window.location.reload();
   });
 
@@ -192,10 +194,12 @@ const gameController = (() => {
     return choice;
   };
 
+  // create a snapshot of current array
   const getCurrentArrayState = (array) => {
     return array.map((element, index) => (element ? element : index));
   };
-  // return filtered array with number of array's indexes that are not taken
+
+  // create an array of available moves
   const getEmptyArrayIndexes = (array) => {
     return array.filter((element) => element !== "X" && element !== "O");
   };
@@ -206,7 +210,7 @@ const gameController = (() => {
     const aiMark = "O";
     // store current array state with empty places switched to indexes of that places
     const currentArrayState = getCurrentArrayState(array);
-    
+
     // create an array of available moves
     const availableMoves = getEmptyArrayIndexes(currentArrayState);
     // keep log of each trial run
@@ -284,7 +288,6 @@ const gameController = (() => {
         } else {
           // playerOne's turn
           if (turn % 2 == 0) {
-      
             array[board.indexOf(spot)] = playerOne.mark;
             if (checkForWinningCombination(array, playerOne.mark)) {
               result = playerOne.name;
@@ -302,9 +305,8 @@ const gameController = (() => {
           }
           displayController.render(array, board);
 
-          // check if there is a winner of if it is a tie
-          evaluateResult(result, array)
-
+          // check if for winner of if it is a tie
+          evaluateResult(result, array);
           turn++;
         }
       })
@@ -335,8 +337,8 @@ const gameController = (() => {
             return;
           } else {
             // AI's turn
-            
-            setTimeout( () =>{
+            // create effect of AI's thinking
+            setTimeout(() => {
               array[minimax(array, playerTwo.mark).index] = playerTwo.mark;
               // array[generateRandomMove(array)] = playerTwo.mark;
 
@@ -349,7 +351,6 @@ const gameController = (() => {
               evaluateResult(result, array);
             }, 500);
           }
-          
         }
       })
     );
@@ -403,6 +404,7 @@ const gameController = (() => {
     }
     return false;
   };
+
   const resetTurn = () => {
     turn = 0;
     result = "";
@@ -416,11 +418,3 @@ const gameController = (() => {
     resetTurn,
   };
 })();
-
-/* TO-DO-LIST
-  X Move turn variable to gameController logic
-  X Create a modal popup announcing the winner of the game
-  X Hide gameboard and ask players for their names, then start the game
-  X Create and option in the beginning to choose opponent (human or AI)
-  X Create an AI
-*/
