@@ -119,12 +119,19 @@ const displayController = (() => {
   changeOpponentButton.addEventListener("click", () => {
     // temporary solution to go back to main menu since
     window.location.reload();
+    // gameBoard.clear();
+    // toggleBeginning();
+    // toggleInterface();
   });
 
   // go back to main screen and start anew from modal
   modalNewGameButton.addEventListener("click", () => {
     // temporary solution to go back to main menu
-    window.location.reload();
+     window.location.reload();
+    // gameBoard.clear();
+    // toggleModal();
+    // toggleBeginning();
+    // toggleInterface();
   });
 
   // start anew from modal
