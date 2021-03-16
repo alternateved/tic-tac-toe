@@ -256,7 +256,7 @@ const gameController = (() => {
       trialRunLogs.push(trialRun);
     }
 
-    // create a store most succesfull trial run reference
+    // create a store most successful trial run reference
     let bestTrialRun = null;
 
     // get the reference to the best trial run
