@@ -7,22 +7,22 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 ![Demo](images/peek.gif)
 
 ## **Features**
-* You can play with another human on the same device
-* You can play with **unbeatable AI**
-* You can input **custom names** for players
-* Live commentary for every move
-* Game is **mobile responsive**
-* You can restart match or start new game altogether
+* you can play with another human on the same device
+* you can play with **unbeatable AI**
+* you can input **custom names** for players
+* live commentary for every move
+* game is **mobile responsive**
+* you can restart match or start new game altogether
 
 ### **Side notes**
-* Used **HTML5 semantic elements** for better structure and readability
-* Learned how to use **factory functions** and **modules**
-* Learned about other possible JavaScript **design patterns**
-* Learned how to make layout a little bit more **animated**
-* Learned how to prevent moving of page's elements with CSS
-* Learned how to create a **modal**
-* Applied **CSS color palette** by `:root` selector
-* Learned a lot about **minimax algorithm** 
+* used **HTML5 semantic elements** for better structure and readability
+* learned how to use **factory functions** and **modules**
+* learned about other possible JavaScript **design patterns**
+* learned how to make layout a little bit more **animated**
+* learned how to prevent moving of page's elements with CSS
+* learned how to create a **modal**
+* applied **CSS color palette** by `:root` selector
+* learned a lot about **minimax algorithm** 
 
 ### **Tools:**
 * Visual Studio Code
