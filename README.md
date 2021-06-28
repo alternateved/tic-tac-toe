@@ -24,12 +24,12 @@ Implementation of Tic Tac Toe game from [The Odin Project](https://www.theodinpr
 * applied **CSS color palette** by `:root` selector
 * learned a lot about **minimax algorithm** 
 
-### **Tools:**
+### **Tools**
 * Visual Studio Code
 * Linux terminal
 * Git and GitHub
 * Adobe Color
 
 
-### **Third party code:**
+### **Third party code**
 * [Google Fonts](https://fonts.google.com/)
